@@ -2,7 +2,7 @@
 #/html/body/div[4]/div/div/div/div[2]/div/div/div/div[3]/div/div[2] xpath for pairs
 import requests, time, sqlite3, random
 from db import Database
-def Scrape_Pairs_Name():
+def Scrape_Pairs_Name(proxy):
     url = "https://api.bitget.com/api/spot/v1/public/currencies"
     response = requests.get(url)
     data = response.json()
@@ -25,7 +25,6 @@ global base, cur
 base = sqlite3.connect('main.db')
 db.__init__
 #db.add(1, "hqwe")
-db.delete_alldata_from_table()
 while True:
     pairsName = Scrape_Pairs_Name()
     for i in range(len(pairsName)):

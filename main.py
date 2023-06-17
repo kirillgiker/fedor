@@ -29,13 +29,21 @@ while True:
     pairsName = Scrape_Pairs_Name()
     for i in range(len(pairsName)):
         try:
-            proxy = random.choice(proxiesList)
-            db.add(i, pairsName[i])
-            ordersAsksBids = Scrape_Orders(pairsName[i]+"USDT", proxy=proxy)
-            asks = str(ordersAsksBids["asks"])
-            bids = str(ordersAsksBids["bids"])
-            asks_bids = "{'asks': "+ asks + ", 'bids': " + bids +"}"
-            db.add_asks_bids(pairsName[i], asks_bids)
+            if not(db.examintation(pairsName[i])): # проверка на наличие в базе данных (в случае отстуствия)
+                proxy = random.choice(proxiesList)
+                db.add(i, pairsName[i])
+                ordersAsksBids = Scrape_Orders(pairsName[i]+"USDT", proxy=proxy)
+                asks = str(ordersAsksBids["asks"])
+                bids = str(ordersAsksBids["bids"])
+                asks_bids = "{'asks': "+ asks + ", 'bids': " + bids +"}"
+                db.add_asks_bids(pairsName[i], asks_bids)
+            else:
+                proxy = random.choice(proxiesList)
+                ordersAsksBids = Scrape_Orders(pairsName[i]+"USDT", proxy=proxy)
+                asks = str(ordersAsksBids["asks"])
+                bids = str(ordersAsksBids["bids"])
+                asks_bids = "{'asks': "+ asks + ", 'bids': " + bids +"}"
+                db.add_asks_bids(pairsName[i], asks_bids)
         except:
             continue
     time.sleep(60*5)
